@@ -1,0 +1,214 @@
+
+
+  :root {
+            --atom-size: 400px; /* Tamaño base del átomo */
+            --nucleus-size: 80px; /* Tamaño del núcleo */
+            --orbit-thickness: 2px; /* Grosor de las órbitas */
+            --electron-size: 12px; /* Tamaño de los electrones */
+            --proton-neutron-size: 16px; /* Tamaño de protones y neutrones */
+
+            --nucleus-color: #FF6347; /* Rojo tomate */
+            --electron-color: #00BFFF; /* Azul cielo profundo */
+            --proton-color: #FFD700; /* Oro */
+            --neutron-color: #A9A9A9; /* Gris oscuro */
+
+            --orbit1-color: #32CD32; /* Verde lima */
+            --orbit2-color: #FF4500; /* Naranja rojizo */
+            --orbit3-color: #9370DB; /* Púrpura medio */
+            --orbit4-color: #FFFF00; /* Amarillo para la nueva órbita */
+
+            --animation-duration-fast: 15s;
+            --animation-duration-medium: 20s;
+            --animation-duration-slow: 25s;
+            --animation-duration-new-orbit: 18s; /* Duración para la nueva órbita */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Cambiado a columna para el título */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0a0a0a; /* Fondo oscuro para contraste */
+            overflow: hidden; /* Evitar barras de desplazamiento */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px; /* Espacio entre el título y el átomo */
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .atom-container {
+            position: relative;
+            width: var(--atom-size);
+            height: var(--atom-size);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d; /* Habilitar 3D para las órbitas */
+        }
+
+        /* Estilo del Núcleo (también sirve como logo central) */
+        .nucleus {
+            width: var(--nucleus-size);
+            height: var(--nucleus-size);
+            background-color: var(--nucleus-color);
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px var(--nucleus-color), 0 0 40px var(--nucleus-color);
+            z-index: 10; /* Asegura que esté al frente */
+            /* Efecto de pulso suave */
+            animation: pulse-nucleus 3s infinite alternate;
+        }
+
+        .nucleus::before {
+            content: '⚛'; /* Símbolo de átomo como parte del logo */
+            font-size: calc(var(--nucleus-size) * 0.6);
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Estilo de las partículas dentro del núcleo */
+        .proton, .neutron {
+            position: absolute;
+            width: var(--proton-neutron-size);
+            height: var(--proton-neutron-size);
+            border-radius: 50%;
+            opacity: 0.8;
+            transition: transform 0.2s ease; /* Transición para el hover */
+            cursor: pointer; /* Indica que es interactivo */
+        }
+
+        .proton {
+            background-color: var(--proton-color);
+            box-shadow: 0 0 8px var(--proton-color);
+        }
+
+        .neutron {
+            background-color: var(--neutron-color);
+            box-shadow: 0 0 8px var(--neutron-color);
+        }
+
+        .proton:hover, .neutron:hover {
+            transform: scale(5.5); /* Se hace más grande para ser más notorio */
+        }
+
+        /* Estilo de las Órbitas */
+        .orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: var(--orbit-thickness) solid rgba(255, 255, 255, 0.2); /* Borde semitransparente */
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            box-sizing: border-box; /* Incluir padding y border en el tamaño */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición para el hover */
+        }
+
+        .orbit:hover {
+            transform: scale(1.02) rotateX(var(--current-rotateX, 0deg)) rotateY(var(--current-rotateY, 0deg)) rotateZ(var(--current-rotateZ, 0deg)); /* Aumenta ligeramente el tamaño */
+            box-shadow: 0 0 25px var(--neon-glow-color, rgba(255,255,255,0.5)); /* Destello al hover */
+            z-index: 15; /* Llevar al frente al hacer hover */
+        }
+
+        .orbit-1 {
+            border-color: var(--orbit1-color);
+            transform: rotateX(90deg); /* Vertical */
+            animation: rotate-orbit-1 var(--animation-duration-fast) linear infinite;
+        }
+
+        .orbit-1:hover { --neon-glow-color: var(--orbit1-color); } /* Color de destello para órbita 1 */
+
+        .orbit-2 {
+            border-color: var(--orbit2-color);
+            transform: rotateX(60deg) rotateY(30deg); /* Diagonal 1 */
+            animation: rotate-orbit-2 var(--animation-duration-medium) linear infinite;
+        }
+        .orbit-2:hover { --neon-glow-color: var(--orbit2-color); } /* Color de destello para órbita 2 */
+
+
+        .orbit-3 {
+            border-color: var(--orbit3-color);
+            transform: rotateX(60deg) rotateY(-30deg); /* Diagonal 2 */
+            animation: rotate-orbit-3 var(--animation-duration-slow) linear infinite;
+        }
+        .orbit-3:hover { --neon-glow-color: var(--orbit3-color); } /* Color de destello para órbita 3 */
+
+
+        /* Nueva Órbita 4 */
+        .orbit-4 {
+            border-color: var(--orbit4-color); /* Usando la nueva variable de color */
+            transform: rotateX(90deg) rotateZ(45deg); /* Otra vertical, rotada para distinguirla */
+            animation: rotate-orbit-4 var(--animation-duration-new-orbit) linear infinite; /* Nueva animación */
+        }
+        .orbit-4:hover { --neon-glow-color: var(--orbit4-color); } /* Color de destello para órbita 4 */
+
+
+        /* Estilo de los Electrones */
+        .electron {
+            position: absolute;
+            width: var(--electron-size);
+            height: var(--electron-size);
+            background-color: var(--electron-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--electron-color);
+            z-index: 5; /* Asegura que estén sobre las órbitas */
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transición para el hover */
+            cursor: pointer; /* Indica que es interactivo */
+        }
+
+        .electron:hover {
+            transform: scale(4.5); /* Se hace más grande */
+            box-shadow: 0 0 15px var(--electron-color), 0 0 30px var(--electron-color); /* Destello más intenso */
+            z-index: 20; /* Llevar al frente al hacer hover */
+        }
+
+        /* Animaciones */
+        @keyframes pulse-nucleus {
+            0% { transform: scale(1); box-shadow: 0 0 20px var(--nucleus-color), 0 0 40px var(--nucleus-color); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px var(--nucleus-color), 0 0 60px var(--nucleus-color); }
+            100% { transform: scale(1); box-shadow: 0 0 20px var(--nucleus-color), 0 0 40px var(--nucleus-color); }
+        }
+
+        @keyframes rotate-orbit-1 {
+            from { transform: rotateX(90deg) rotateZ(0deg); }
+            to { transform: rotateX(90deg) rotateZ(360deg); }
+        }
+
+        @keyframes rotate-orbit-2 {
+            from { transform: rotateX(60deg) rotateY(30deg) rotateZ(0deg); }
+            to { transform: rotateX(60deg) rotateY(30deg) rotateZ(360deg); }
+        }
+
+        @keyframes rotate-orbit-3 {
+            from { transform: rotateX(60deg) rotateY(-30deg) rotateZ(0deg); }
+            to { transform: rotateX(60deg) rotateY(-30deg) rotateZ(360deg); }
+        }
+
+        /* Animación para la nueva órbita 4 */
+        @keyframes rotate-orbit-4 {
+            from { transform: rotateX(90deg) rotateZ(45deg); }
+            to { transform: rotateX(90deg) rotateZ(405deg); } /* 360 + 45 */
+        }
+
+        /* Responsividad básica */
+        @media (max-width: 600px) {
+            :root {
+                --atom-size: 300px;
+                --nucleus-size: 60px;
+                --electron-size: 10px;
+                --proton-neutron-size: 14px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
